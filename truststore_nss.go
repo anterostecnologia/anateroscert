@@ -1,4 +1,4 @@
-// Copyright 2018 The mkcert Authors. All rights reserved.
+// Copyright 2018 The anteroscert Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -69,7 +69,7 @@ func init() {
 	}
 }
 
-func (m *mkcert) checkNSS() bool {
+func (m *anteroscert) checkNSS() bool {
 	if !hasCertutil {
 		return false
 	}
@@ -85,7 +85,7 @@ func (m *mkcert) checkNSS() bool {
 	return success
 }
 
-func (m *mkcert) installNSS() bool {
+func (m *anteroscert) installNSS() bool {
 	if m.forEachNSSProfile(func(profile string) {
 		cmd := exec.Command(certutilPath, "-A", "-d", profile, "-t", "C,,", "-n", m.caUniqueName(), "-i", filepath.Join(m.CAROOT, rootName))
 		out, err := execCertutil(cmd)
@@ -95,14 +95,14 @@ func (m *mkcert) installNSS() bool {
 		return false
 	}
 	if !m.checkNSS() {
-		log.Printf("Installing in %s failed. Please report the issue with details about your environment at https://github.com/FiloSottile/mkcert/issues/new 👎", NSSBrowsers)
+		log.Printf("Installing in %s failed. Please report the issue with details about your environment at https://github.com/anterostecnologia/anteroscert/issues/new 👎", NSSBrowsers)
 		log.Printf("Note that if you never started %s, you need to do that at least once.", NSSBrowsers)
 		return false
 	}
 	return true
 }
 
-func (m *mkcert) uninstallNSS() {
+func (m *anteroscert) uninstallNSS() {
 	m.forEachNSSProfile(func(profile string) {
 		err := exec.Command(certutilPath, "-V", "-d", profile, "-u", "L", "-n", m.caUniqueName()).Run()
 		if err != nil {
@@ -127,7 +127,7 @@ func execCertutil(cmd *exec.Cmd) ([]byte, error) {
 	return out, err
 }
 
-func (m *mkcert) forEachNSSProfile(f func(profile string)) (found int) {
+func (m *anteroscert) forEachNSSProfile(f func(profile string)) (found int) {
 	profiles, _ := filepath.Glob(FirefoxProfile)
 	profiles = append(profiles, nssDBs...)
 	for _, profile := range profiles {
