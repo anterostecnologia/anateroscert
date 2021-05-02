@@ -1,4 +1,4 @@
-// Copyright 2018 The mkcert Authors. All rights reserved.
+// Copyright 2018 The anteroscert Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -49,7 +49,7 @@ var trustSettingsData = []byte(`
 </array>
 `)
 
-func (m *mkcert) installPlatform() bool {
+func (m *anteroscert) installPlatform() bool {
 	cmd := commandWithSudo("security", "add-trusted-cert", "-d", "-k", "/Library/Keychains/System.keychain", filepath.Join(m.CAROOT, rootName))
 	out, err := cmd.CombinedOutput()
 	fatalIfCmdErr(err, "security add-trusted-cert", out)
@@ -102,7 +102,7 @@ func (m *mkcert) installPlatform() bool {
 	return true
 }
 
-func (m *mkcert) uninstallPlatform() bool {
+func (m *anteroscert) uninstallPlatform() bool {
 	cmd := commandWithSudo("security", "remove-trusted-cert", "-d", filepath.Join(m.CAROOT, rootName))
 	out, err := cmd.CombinedOutput()
 	fatalIfCmdErr(err, "security remove-trusted-cert", out)
