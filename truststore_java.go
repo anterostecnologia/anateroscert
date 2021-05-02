@@ -1,4 +1,4 @@
-// Copyright 2018 The mkcert Authors. All rights reserved.
+// Copyright 2018 The anteroscert Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -54,7 +54,7 @@ func init() {
 	}
 }
 
-func (m *mkcert) checkJava() bool {
+func (m *anteroscert) checkJava() bool {
 	if !hasKeytool {
 		return false
 	}
@@ -78,7 +78,7 @@ func (m *mkcert) checkJava() bool {
 	return exists(m.caCert, s1, keytoolOutput) || exists(m.caCert, s256, keytoolOutput)
 }
 
-func (m *mkcert) installJava() {
+func (m *anteroscert) installJava() {
 	args := []string{
 		"-importcert", "-noprompt",
 		"-keystore", cacertsPath,
@@ -91,7 +91,7 @@ func (m *mkcert) installJava() {
 	fatalIfCmdErr(err, "keytool -importcert", out)
 }
 
-func (m *mkcert) uninstallJava() {
+func (m *anteroscert) uninstallJava() {
 	args := []string{
 		"-delete",
 		"-alias", m.caUniqueName(),
