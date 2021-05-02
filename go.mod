@@ -1,4 +1,4 @@
-module filippo.io/mkcert
+module anteroscert
 
 go 1.13
 
