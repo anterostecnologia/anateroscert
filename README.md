@@ -71,11 +71,11 @@ brew install anteroscert
 or build from source (requires Go 1.13+)
 
 ```
-git clone https://github.com/FiloSottile/anteroscert && cd anteroscert
+git clone https://github.com/anterostecnologia/anteroscert && cd anteroscert
 go build -ldflags "-X main.Version=$(git describe --tags)"
 ```
 
-or use [the pre-built binaries](https://github.com/FiloSottile/anteroscert/releases).
+or use [the pre-built binaries](https://github.com/anterostecnologia/anteroscert/releases).
 
 For Arch Linux users, [`anteroscert`](https://www.archlinux.org/packages/community/x86_64/anteroscert/) is available on the official Arch Linux repository.
 
@@ -98,7 +98,7 @@ scoop bucket add extras
 scoop install anteroscert
 ```
 
-or build from source (requires Go 1.10+), or use [the pre-built binaries](https://github.com/FiloSottile/anteroscert/releases).
+or build from source (requires Go 1.10+), or use [the pre-built binaries](https://github.com/anterostecnologia/anteroscert/releases).
 
 If you're running into permission problems try running `anteroscert` as an Administrator.
 
@@ -161,7 +161,7 @@ anteroscert filippo@example.com
 
 For the certificates to be trusted on mobile devices, you will have to install the root CA. It's the `rootCA.pem` file in the folder printed by `anteroscert -CAROOT`.
 
-On iOS, you can either use AirDrop, email the CA to yourself, or serve it from an HTTP server. After opening it, you need to [install the profile in Settings > Profile Downloaded](https://github.com/FiloSottile/anteroscert/issues/233#issuecomment-690110809) and then [enable full trust in it](https://support.apple.com/en-nz/HT204477).
+On iOS, you can either use AirDrop, email the CA to yourself, or serve it from an HTTP server. After opening it, you need to [install the profile in Settings > Profile Downloaded](https://github.com/anterostecnologia/anteroscert/issues/233#issuecomment-690110809) and then [enable full trust in it](https://support.apple.com/en-nz/HT204477).
 
 For Android, you will have to install the CA and then enable user roots in the development build of your app. See [this StackOverflow answer](https://stackoverflow.com/a/22040887/749014).
 
