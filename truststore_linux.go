@@ -1,4 +1,4 @@
-// Copyright 2018 The mkcert Authors. All rights reserved.
+// Copyright 2018 The anteroscert Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -47,11 +47,11 @@ func init() {
 	}
 }
 
-func (m *mkcert) systemTrustFilename() string {
+func (m *anteroscert) systemTrustFilename() string {
 	return fmt.Sprintf(SystemTrustFilename, strings.Replace(m.caUniqueName(), " ", "_", -1))
 }
 
-func (m *mkcert) installPlatform() bool {
+func (m *anteroscert) installPlatform() bool {
 	if SystemTrustCommand == nil {
 		log.Printf("Installing to the system store is not yet supported on this Linux 😣 but %s will still work.", NSSBrowsers)
 		log.Printf("You can also manually install the root certificate at %q.", filepath.Join(m.CAROOT, rootName))
@@ -73,7 +73,7 @@ func (m *mkcert) installPlatform() bool {
 	return true
 }
 
-func (m *mkcert) uninstallPlatform() bool {
+func (m *anteroscert) uninstallPlatform() bool {
 	if SystemTrustCommand == nil {
 		return false
 	}
@@ -83,7 +83,7 @@ func (m *mkcert) uninstallPlatform() bool {
 	fatalIfCmdErr(err, "rm", out)
 
 	// We used to install under non-unique filenames.
-	legacyFilename := fmt.Sprintf(SystemTrustFilename, "mkcert-rootCA")
+	legacyFilename := fmt.Sprintf(SystemTrustFilename, "anteroscert-rootCA")
 	if pathExists(legacyFilename) {
 		cmd := commandWithSudo("rm", "-f", legacyFilename)
 		out, err := cmd.CombinedOutput()
