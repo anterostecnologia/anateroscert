@@ -1,4 +1,4 @@
-// Copyright 2018 The mkcert Authors. All rights reserved.
+// Copyright 2018 The anteroscert Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -47,7 +47,7 @@ func init() {
 	}
 }
 
-func (m *mkcert) makeCert(hosts []string) {
+func (m *anteroscert) makeCert(hosts []string) {
 	if m.caKey == nil {
 		log.Fatalln("ERROR: can't create new certificates because the CA key (rootCA-key.pem) is missing")
 	}
@@ -64,7 +64,7 @@ func (m *mkcert) makeCert(hosts []string) {
 	tpl := &x509.Certificate{
 		SerialNumber: randomSerialNumber(),
 		Subject: pkix.Name{
-			Organization:       []string{"mkcert development certificate"},
+			Organization:       []string{"anteroscert development certificate"},
 			OrganizationalUnit: []string{userAndHostname},
 		},
 
@@ -145,7 +145,7 @@ func (m *mkcert) makeCert(hosts []string) {
 	log.Printf("It will expire on %s 🗓\n\n", expiration.Format("2 January 2006"))
 }
 
-func (m *mkcert) printHosts(hosts []string) {
+func (m *anteroscert) printHosts(hosts []string) {
 	secondLvlWildcardRegexp := regexp.MustCompile(`(?i)^\*\.[0-9a-z_-]+$`)
 	log.Printf("\nCreated a new certificate valid for the following names 📜")
 	for _, h := range hosts {
@@ -163,7 +163,7 @@ func (m *mkcert) printHosts(hosts []string) {
 	}
 }
 
-func (m *mkcert) generateKey(rootCA bool) (crypto.PrivateKey, error) {
+func (m *anteroscert) generateKey(rootCA bool) (crypto.PrivateKey, error) {
 	if m.ecdsa {
 		return ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	}
@@ -173,7 +173,7 @@ func (m *mkcert) generateKey(rootCA bool) (crypto.PrivateKey, error) {
 	return rsa.GenerateKey(rand.Reader, 2048)
 }
 
-func (m *mkcert) fileNames(hosts []string) (certFile, keyFile, p12File string) {
+func (m *anteroscert) fileNames(hosts []string) (certFile, keyFile, p12File string) {
 	defaultName := strings.Replace(hosts[0], ":", "_", -1)
 	defaultName = strings.Replace(defaultName, "*", "_wildcard", -1)
 	if len(hosts) > 1 {
@@ -206,7 +206,7 @@ func randomSerialNumber() *big.Int {
 	return serialNumber
 }
 
-func (m *mkcert) makeCertFromCSR() {
+func (m *anteroscert) makeCertFromCSR() {
 	if m.caKey == nil {
 		log.Fatalln("ERROR: can't create new certificates because the CA key (rootCA-key.pem) is missing")
 	}
@@ -277,7 +277,7 @@ func (m *mkcert) makeCertFromCSR() {
 }
 
 // loadCA will load or create the CA at CAROOT.
-func (m *mkcert) loadCA() {
+func (m *anteroscert) loadCA() {
 	if !pathExists(filepath.Join(m.CAROOT, rootName)) {
 		m.newCA()
 	}
@@ -305,7 +305,7 @@ func (m *mkcert) loadCA() {
 	fatalIfErr(err, "failed to parse the CA key")
 }
 
-func (m *mkcert) newCA() {
+func (m *anteroscert) newCA() {
 	priv, err := m.generateKey(true)
 	fatalIfErr(err, "failed to generate the CA key")
 	pub := priv.(crypto.Signer).Public()
@@ -325,13 +325,13 @@ func (m *mkcert) newCA() {
 	tpl := &x509.Certificate{
 		SerialNumber: randomSerialNumber(),
 		Subject: pkix.Name{
-			Organization:       []string{"mkcert development CA"},
+			Organization:       []string{"anteroscert development CA"},
 			OrganizationalUnit: []string{userAndHostname},
 
 			// The CommonName is required by iOS to show the certificate in the
 			// "Certificate Trust Settings" menu.
-			// https://github.com/FiloSottile/mkcert/issues/47
-			CommonName: "mkcert " + userAndHostname,
+			// https://github.com/anterostecnologia/anteroscert/issues/47
+			CommonName: "anteroscert " + userAndHostname,
 		},
 		SubjectKeyId: skid[:],
 
@@ -361,6 +361,6 @@ func (m *mkcert) newCA() {
 	log.Printf("Created a new local CA 💥\n")
 }
 
-func (m *mkcert) caUniqueName() string {
-	return "mkcert development CA " + m.caCert.SerialNumber.String()
+func (m *anteroscert) caUniqueName() string {
+	return "anteroscert development CA " + m.caCert.SerialNumber.String()
 }
