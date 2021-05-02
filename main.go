@@ -1,8 +1,8 @@
-// Copyright 2018 The mkcert Authors. All rights reserved.
+// Copyright 2018 The anteroscert Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Command mkcert is a simple zero-config tool to make development certificates.
+// Command anteroscert is a simple zero-config tool to make development certificates.
 package main
 
 import (
@@ -27,21 +27,21 @@ import (
 	"golang.org/x/net/idna"
 )
 
-const shortUsage = `Usage of mkcert:
+const shortUsage = `Usage of anteroscert:
 
-	$ mkcert -install
+	$ anteroscert -install
 	Install the local CA in the system trust store.
 
-	$ mkcert example.org
+	$ anteroscert example.org
 	Generate "example.org.pem" and "example.org-key.pem".
 
-	$ mkcert example.com myapp.dev localhost 127.0.0.1 ::1
+	$ anteroscert example.com myapp.dev localhost 127.0.0.1 ::1
 	Generate "example.com+4.pem" and "example.com+4-key.pem".
 
-	$ mkcert "*.example.it"
+	$ anteroscert "*.example.it"
 	Generate "_wildcard.example.it.pem" and "_wildcard.example.it-key.pem".
 
-	$ mkcert -uninstall
+	$ anteroscert -uninstall
 	Uninstall the local CA (but do not delete it).
 
 `
@@ -102,7 +102,7 @@ func main() {
 	)
 	flag.Usage = func() {
 		fmt.Fprint(flag.CommandLine.Output(), shortUsage)
-		fmt.Fprintln(flag.CommandLine.Output(), `For more options, run "mkcert -help".`)
+		fmt.Fprintln(flag.CommandLine.Output(), `For more options, run "anteroscert -help".`)
 	}
 	flag.Parse()
 	if *helpFlag {
@@ -138,7 +138,7 @@ func main() {
 	if *csrFlag != "" && flag.NArg() != 0 {
 		log.Fatalln("ERROR: can't specify extra arguments when using -csr")
 	}
-	(&mkcert{
+	(&anteroscert{
 		installMode: *installFlag, uninstallMode: *uninstallFlag, csrPath: *csrFlag,
 		pkcs12: *pkcs12Flag, ecdsa: *ecdsaFlag, client: *clientFlag,
 		certFile: *certFileFlag, keyFile: *keyFileFlag, p12File: *p12FileFlag,
@@ -148,7 +148,7 @@ func main() {
 const rootName = "rootCA.pem"
 const rootKeyName = "rootCA-key.pem"
 
-type mkcert struct {
+type anteroscert struct {
 	installMode, uninstallMode bool
 	pkcs12, ecdsa, client      bool
 	keyFile, certFile, p12File string
@@ -164,7 +164,7 @@ type mkcert struct {
 	ignoreCheckFailure bool
 }
 
-func (m *mkcert) Run(args []string) {
+func (m *anteroscert) Run(args []string) {
 	m.CAROOT = getCAROOT()
 	if m.CAROOT == "" {
 		log.Fatalln("ERROR: failed to find the default CA location, set one as the CAROOT env var")
@@ -195,7 +195,7 @@ func (m *mkcert) Run(args []string) {
 			log.Println("Note: the local CA is not installed in the Java trust store.")
 		}
 		if warning {
-			log.Println("Run \"mkcert -install\" for certificates to be trusted automatically ⚠️")
+			log.Println("Run \"anteroscert -install\" for certificates to be trusted automatically ⚠️")
 		}
 	}
 
@@ -257,10 +257,10 @@ func getCAROOT() string {
 		}
 		dir = filepath.Join(dir, ".local", "share")
 	}
-	return filepath.Join(dir, "mkcert")
+	return filepath.Join(dir, "anteroscert")
 }
 
-func (m *mkcert) install() {
+func (m *anteroscert) install() {
 	if storeEnabled("system") {
 		if m.checkPlatform() {
 			log.Print("The local CA is already installed in the system trust store! 👍")
@@ -281,7 +281,7 @@ func (m *mkcert) install() {
 				log.Printf(`Note: %s support is not available on your platform. ℹ️`, NSSBrowsers)
 			} else if !hasCertutil {
 				log.Printf(`Warning: "certutil" is not available, so the CA can't be automatically installed in %s! ⚠️`, NSSBrowsers)
-				log.Printf(`Install "certutil" with "%s" and re-run "mkcert -install" 👈`, CertutilInstallHelp)
+				log.Printf(`Install "certutil" with "%s" and re-run "anteroscert -install" 👈`, CertutilInstallHelp)
 			}
 		}
 	}
@@ -300,14 +300,14 @@ func (m *mkcert) install() {
 	log.Print("")
 }
 
-func (m *mkcert) uninstall() {
+func (m *anteroscert) uninstall() {
 	if storeEnabled("nss") && hasNSS {
 		if hasCertutil {
 			m.uninstallNSS()
 		} else if CertutilInstallHelp != "" {
 			log.Print("")
 			log.Printf(`Warning: "certutil" is not available, so the CA can't be automatically uninstalled from %s (if it was ever installed)! ⚠️`, NSSBrowsers)
-			log.Printf(`You can install "certutil" with "%s" and re-run "mkcert -uninstall" 👈`, CertutilInstallHelp)
+			log.Printf(`You can install "certutil" with "%s" and re-run "anteroscert -uninstall" 👈`, CertutilInstallHelp)
 			log.Print("")
 		}
 	}
@@ -329,7 +329,7 @@ func (m *mkcert) uninstall() {
 	}
 }
 
-func (m *mkcert) checkPlatform() bool {
+func (m *anteroscert) checkPlatform() bool {
 	if m.ignoreCheckFailure {
 		return true
 	}
@@ -381,7 +381,7 @@ func commandWithSudo(cmd ...string) *exec.Cmd {
 	}
 	if !binaryExists("sudo") {
 		sudoWarningOnce.Do(func() {
-			log.Println(`Warning: "sudo" is not available, and mkcert is not running as root. The (un)install operation might fail. ⚠️`)
+			log.Println(`Warning: "sudo" is not available, and anteroscert is not running as root. The (un)install operation might fail. ⚠️`)
 		})
 		return exec.Command(cmd[0], cmd[1:]...)
 	}
